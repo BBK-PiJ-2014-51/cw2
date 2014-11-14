@@ -1,7 +1,9 @@
 /**
  * Created by keith for the second coursework assignment.
- * extended by caleb clayton for cw2
+ * extended by caleb clayton (part time cs) for cw2
+ * 
  */
+
 public class Fraction {
     private int numerator;
     private int denominator;
@@ -9,7 +11,7 @@ public class Fraction {
     public Fraction(int num, int denom) {
         if (denom == 0) {
             System.out.println("Invalid fraction with denominator 0"); 
-	    // this should use exceptions
+            // this should use exceptions
             return;
         }
         int gcd = myGcd(num, denom);
@@ -65,31 +67,31 @@ public class Fraction {
         return new Fraction(num, denom);
     } 
     
-    public Fraction divide(Fraction other) {
-		
-		//TO DO: IMPLEMENT
-				
-        //int num = this.getNumerator() * other.getNumerator();
-        //int denom = this.getDenominator() * other.getDenominator();
-        return new Fraction(num, denom);
+    /* fractions can be divided by flipping the denominator and 
+     * numerator of one of the fractions and then multiplying 
+     */
+    public Fraction divide(Fraction other) {	
+		return this.multiply(new Fraction(other.getDenominator(), other.getNumerator()));
     }
     
+    /* fractions with the denominator can be added simply by adding the numerators
+     * and retaining the denominator.
+     */
     public Fraction add(Fraction other) {
-		
-		//TO DO: IMPLEMENT
-		
-        //int num = this.getNumerator() * other.getNumerator();
-        //int denom = this.getDenominator() * other.getDenominator();
-        return new Fraction(num, denom);
+    	int commonDenominator = other.getDenominator() * this.denominator; // find a common denominator
+    	int thisMultiplier = commonDenominator / this.getDenominator();   // compute multipliers to adjust numerators 
+    	int otherMultiplier = commonDenominator / other.denominator;
+    	int nextNumerator = (this.numerator * thisMultiplier) + (other.getNumerator() * otherMultiplier);
+    	return new Fraction(nextNumerator, commonDenominator);
     }
     
+    /* same as add() but subtracts the adjusted numerators instead of adding them */
     public Fraction subtract(Fraction other) {
-		
-		//TO DO: IMPLEMENT
-		
-        //int num = this.getNumerator() * other.getNumerator();
-        //int denom = this.getDenominator() * other.getDenominator();
-        return new Fraction(num, denom);
+    	int commonDenominator = other.getDenominator() * this.denominator; // find a common denominator
+    	int thisMultiplier = commonDenominator / this.getDenominator();   // compute multipliers to adjust numerators 
+    	int otherMultiplier = commonDenominator / other.denominator;
+    	int nextNumerator = (this.numerator * thisMultiplier) - (other.getNumerator() * otherMultiplier);
+    	return new Fraction(nextNumerator, commonDenominator);		
     }
     
     public Fraction absValue(Fraction other) {
