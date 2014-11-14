@@ -19,6 +19,11 @@ public class Fraction {
         setDenominator(denom / gcd);
     }
 
+    public Fraction(int num){
+        setNumerator(num);
+        setDenominator(1);
+    }
+    
     @Override
     public String toString() {
         return (getDenominator() ==1) ? String.valueOf(getNumerator()) : "" + getNumerator() + '/' + getDenominator();
@@ -61,7 +66,6 @@ public class Fraction {
     }
 
     public Fraction multiply(Fraction other) {
-
         int num = this.getNumerator() * other.getNumerator();
         int denom = this.getDenominator() * other.getDenominator();
         return new Fraction(num, denom);
@@ -94,25 +98,23 @@ public class Fraction {
     	return new Fraction(nextNumerator, commonDenominator);		
     }
     
-    public Fraction absValue(Fraction other) {
-		
-		//TO DO: IMPLEMENT
-		
-        //int num = this.getNumerator() * other.getNumerator();
-        //int denom = this.getDenominator() * other.getDenominator();
-        return new Fraction(num, denom);
+    
+    /* square both numerator and denominator to obtain a postive number,
+     * take the sqrt of the result to find the original absolute value
+     */
+    public Fraction absValue() {
+        int numerator = (int) Math.sqrt(this.numerator * this.numerator);
+        int denominator = (int) Math.sqrt(this.denominator * this.denominator);
+        return new Fraction(numerator, denominator);
     }
 
-	public Fraction negate(Fraction other) {
-		
-		//TO DO: IMPLEMENT
-		
-        //int num = this.getNumerator() * other.getNumerator();
-        //int denom = this.getDenominator() * other.getDenominator();
-        return new Fraction(num, denom);
+    /* changing the sign of the numerator by multiplying by -1 
+     * will change the sign of the fraction 
+     */
+	public Fraction negate() {
+		return new Fraction(this.numerator * -1, this.denominator);
     }
-    
-    
+       
     private int myGcd(int a, int b) {
         while (b != 0) {
             int t = b;
