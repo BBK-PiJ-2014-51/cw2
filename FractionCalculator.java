@@ -15,17 +15,54 @@ public class FractionCalculator{
 				} else { // if instead no operator is stored in memory, set current value to the parsed fraction
 					this.currentValue = nextFraction;
 				}
-			} else { //if token does not begin with a digit, it must be an operator or command
-				if (Character.isLetter(tokens[i].charAt(0))){ //commands begin with letters and are performed
-					//this.processCommand(); //still needs implementing
-				} else { //otherwise it must be an operator 
+			} else if (Character.isLetter(tokens[i].charAt(0))){ //commands begin with letters
+					this.executeCommand(tokens[i]);
+			} else if (isOperator(tokens[i])) { //otherwise it must be an operator 
 					this.currentOperator = tokens[i];
-				}								
+			} else {  								
+			
 			}
 		}
 		return this.currentValue;
 	}
 	
+	private void executeCommand(String token) {
+		char cmd = token.toLowerCase().charAt(0);
+		if (cmd == 'a'){
+			this.currentValue = currentValue.absValue();
+		} else if (cmd == 'n'){
+			this.currentValue = currentValue.negate();
+		} else if (cmd == 'c'){
+			this.reset();
+		} else if (cmd == 'q'){
+			this.quit(); //probably not what im going to do ultimately. 
+		} else {
+			
+		}
+	}
+
+	private void quit() {
+		
+		
+	}
+
+	private void reset() {
+		this.currentValue = new Fraction(0);
+		this.currentOperator = null;
+	}
+
+	private boolean isOperator(String token) {
+		switch(token.charAt(0)){
+			case '+':
+			case '-':
+			case '*':
+			case '/':
+				return true;
+			default:
+				return false;
+		}
+	}
+
 	private Fraction calculate(Fraction nextFraction) {
 		if(this.currentOperator.equals("+")){
 			return currentValue.add(nextFraction);

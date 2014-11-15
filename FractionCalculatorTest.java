@@ -10,9 +10,9 @@ public class FractionCalculatorTest{
 		test.testExpressionString("1/2 * 1/2", new Fraction(1,4), "Test 03: Simple multiplication");
 		test.testExpressionString("1/4 / 1/3", new Fraction(3,4), "Test 04: Simple division");
 		//basic tests with commands
-		test.testExpressionString("1/3 - 2/3 N", new Fraction(1,3), "Test 05: Negative");
-		test.testExpressionString("1/2 - 1/4 c", new Fraction(0,1), "Test 06: Clear");
-		test.testExpressionString("1/2 * -1/2 abs", new Fraction(1,4), "Test 07: Absolute Value");
+		test.testExpressionString("1/3 - 2/3 N", new Fraction(1,3), "Test 05: Negate Function");
+		test.testExpressionString("1/2 - 1/4 c", new Fraction(0,1), "Test 06: Clear Function");
+		test.testExpressionString("1/2 * -1/2 abs", new Fraction(1,4), "Test 07: Absolute Value Function");
 		//test.testExpressionString("1/4 / 1/3 q", null, "Test 08: Quit"); //test quit?
 	
 	}
