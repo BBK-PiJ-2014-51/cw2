@@ -7,16 +7,19 @@ public class FractionCalculator{
 		String[] tokens = inputString.split("\\s");		
 		this.currentValue = fraction;
 		for (int i = 0; i < tokens.length; i++){
-			if (Character.isDigit(tokens[i].charAt(0))){ // if token begins with a number it must be a fraction
-				this.applyNextFraction(tokens[i]);
-			} else if(tokens[i].length() > 1){ // if token begins with a negative sign followed by a number it must also be a fraction
-				if (tokens[i].charAt(0) == '-' && Character.isDigit(tokens[i].charAt(1))) this.applyNextFraction(tokens[i]);
-			} else if (Character.isLetter(tokens[i].charAt(0))){ //commands begin with letters
-					this.executeCommand(tokens[i]);
-			} else if (isOperator(tokens[i])) { //at this point input should be an operator 
-					this.currentOperator = tokens[i];
-			} else { //print error otherwise 								
+			char firstChar = tokens[i].charAt(0);
 			
+			if (Character.isDigit(firstChar)){ // if token begins with a number it must be a fraction
+				this.applyNextFraction(tokens[i]);
+			//or if token begins with negative sign and has more than one char it must be a fraction 
+			} else if(tokens[i].length() > 1 && firstChar == '-'){ 
+				this.applyNextFraction(tokens[i]);
+			} else if (Character.isLetter(firstChar)){ //commands begin with letters
+				this.executeCommand(tokens[i].toLowerCase());
+			} else if (isOperator(tokens[i])) { //at this point input should be an operator 
+				this.currentOperator = tokens[i];
+			} else { //print error otherwise 								
+				System.out.println("ERROR: invalid token");
 			}
 		}
 		return this.currentValue;
@@ -35,6 +38,7 @@ public class FractionCalculator{
 		
 	private void executeCommand(String token) {
 		char cmd = token.toLowerCase().charAt(0);
+		
 		if (cmd == 'a'){
 			this.currentValue = currentValue.absValue();
 		} else if (cmd == 'n'){
