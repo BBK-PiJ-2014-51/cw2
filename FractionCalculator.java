@@ -8,24 +8,31 @@ public class FractionCalculator{
 		this.currentValue = fraction;
 		for (int i = 0; i < tokens.length; i++){
 			if (Character.isDigit(tokens[i].charAt(0))){ // if token begins with a number it must be a fraction
-				Fraction nextFraction = this.parseFraction(tokens[i]);
-				if (this.currentOperator != null){ // if an operator is stored in memory already, we should calculate
-					this.currentValue = this.calculate(nextFraction);
-					this.currentOperator = null; //reset operator to null
-				} else { // if instead no operator is stored in memory, set current value to the parsed fraction
-					this.currentValue = nextFraction;
-				}
+				this.applyNextFraction(tokens[i]);
+			} else if(tokens[i].length() > 1){ // if token begins with a negative sign followed by a number it must also be a fraction
+				if (tokens[i].charAt(0) == '-' && Character.isDigit(tokens[i].charAt(1))) this.applyNextFraction(tokens[i]);
 			} else if (Character.isLetter(tokens[i].charAt(0))){ //commands begin with letters
 					this.executeCommand(tokens[i]);
-			} else if (isOperator(tokens[i])) { //otherwise it must be an operator 
+			} else if (isOperator(tokens[i])) { //at this point input should be an operator 
 					this.currentOperator = tokens[i];
-			} else {  								
+			} else { //print error otherwise 								
 			
 			}
 		}
 		return this.currentValue;
 	}
 	
+	private void applyNextFraction(String token){
+		Fraction nextFraction = this.parseFraction(token);
+		if (this.currentOperator != null){ // if an operator is stored in memory already, we should calculate
+			this.currentValue = this.calculate(nextFraction);
+			this.currentOperator = null; //reset operator to null
+		} else { // if instead no operator is stored in memory, set current value to the parsed fraction
+			this.currentValue = nextFraction;
+		}
+	}
+	
+		
 	private void executeCommand(String token) {
 		char cmd = token.toLowerCase().charAt(0);
 		if (cmd == 'a'){
