@@ -2,6 +2,39 @@ public class FractionCalculator{
 	private Fraction currentValue = new Fraction(0);
 	private String currentOperator = null;
 
+	
+	public static void main(String[] args) {
+		FractionCalculator calc = new FractionCalculator();
+		calc.printWelcomeMsg();
+		calc.loop();
+		calc.quit();
+	}
+	
+	private void loop() {
+		boolean validInput = true;
+		while (validInput){
+			 String inputString = System.console().readLine();
+			if (isValidInput(inputString)){
+				evaluate(this.currentValue, inputString); 
+			} else{
+				break;
+			}
+		}
+	}
+
+	private boolean isValidInput(String inputString) {
+		// TODO Implement
+		return false;
+	}
+
+	private void printWelcomeMsg() {
+		// TODO Implement
+	}
+	
+	private void quit() {
+		// TODO Implement	
+	}
+
 	public Fraction evaluate(Fraction fraction, String inputString) {
 		if (!inputString.contains("\\s"));
 		String[] tokens = inputString.split("\\s");		
@@ -50,11 +83,6 @@ public class FractionCalculator{
 		} else {
 			
 		}
-	}
-
-	private void quit() {
-		
-		
 	}
 
 	private void reset() {
