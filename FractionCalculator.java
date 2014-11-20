@@ -28,7 +28,8 @@ public class FractionCalculator{
 	}
 
 	private void printWelcomeMsg() {
-		// TODO Implement
+		System.out.println("Welcome to my fraction calculator for PiJ coursework 2.");
+		System.out.println("By Caleb Clayton.");
 	}
 	
 	private void quit() {
@@ -44,7 +45,7 @@ public class FractionCalculator{
 			
 			if (Character.isDigit(firstChar)){ // if token begins with a number it must be a fraction
 				this.applyNextFraction(tokens[i]);
-			//or if token begins with negative sign and has more than one char it must be a fraction 
+			//if token begins with negative sign and has more than one char it must be a fraction 
 			} else if(tokens[i].length() > 1 && firstChar == '-'){ 
 				this.applyNextFraction(tokens[i]);
 			} else if (Character.isLetter(firstChar)){ //commands begin with letters
@@ -70,15 +71,13 @@ public class FractionCalculator{
 	
 		
 	private void executeCommand(String token) {
-		char cmd = token.toLowerCase().charAt(0);
-		
-		if (cmd == 'a'){
+		if (token.equals("a") || token.equals("abs")){
 			this.currentValue = currentValue.absValue();
-		} else if (cmd == 'n'){
+		} else if (token.equals("n")  || token.equals("neg")){
 			this.currentValue = currentValue.negate();
-		} else if (cmd == 'c'){
+		} else if (token.equals("c") || token.equals("clear")){
 			this.reset();
-		} else if (cmd == 'q'){
+		} else if (token.equals("q") || token.equals("quit")){
 			this.quit(); //probably not what im going to do ultimately. 
 		} else {
 			
@@ -90,7 +89,18 @@ public class FractionCalculator{
 		this.currentOperator = null;
 	}
 
+	private boolean isFraction(String token) {
+		
+		return true;
+	}
+	
+	private boolean isCommand(String token) {
+		
+		return true;
+	}
+	
 	private boolean isOperator(String token) {
+		if(token.length() != 1) return false; //operators are always a single char
 		switch(token.charAt(0)){
 			case '+':
 			case '-':
