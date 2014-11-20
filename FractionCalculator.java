@@ -23,8 +23,15 @@ public class FractionCalculator{
 	}
 
 	private boolean isValidInput(String inputString) {
-		// TODO Implement
-		return false;
+		String[] tokens = inputString.split("\\s");	
+		for (int i = 0; i < tokens.length; i++){
+			if (!isValidToken(tokens[i])) return false;
+		}
+		return true;
+	}
+	
+	private boolean isValidToken(String token){
+		return (isFraction(token) || isOperator(token) || isCommand(token));
 	}
 
 	private void printWelcomeMsg() {
@@ -37,22 +44,18 @@ public class FractionCalculator{
 	}
 
 	public Fraction evaluate(Fraction fraction, String inputString) {
-		if (!inputString.contains("\\s"));
-		String[] tokens = inputString.split("\\s");		
+		//if (!inputString.contains("\\s"));
+		inputString = inputString.toLowerCase();
+		String[] tokens = inputString.split("\\s");
 		this.currentValue = fraction;
 		for (int i = 0; i < tokens.length; i++){
-			char firstChar = tokens[i].charAt(0);
-			
-			if (Character.isDigit(firstChar)){ // if token begins with a number it must be a fraction
-				this.applyNextFraction(tokens[i]);
-			//if token begins with negative sign and has more than one char it must be a fraction 
-			} else if(tokens[i].length() > 1 && firstChar == '-'){ 
-				this.applyNextFraction(tokens[i]);
-			} else if (Character.isLetter(firstChar)){ //commands begin with letters
-				this.executeCommand(tokens[i].toLowerCase());
-			} else if (isOperator(tokens[i])) { //at this point input should be an operator 
+			if (isOperator(tokens[i])) { //at this point input should be an operator 
 				this.currentOperator = tokens[i];
-			} else { //print error otherwise 								
+			}else if (isFraction(tokens[i])){ 
+				this.applyNextFraction(tokens[i]);
+			} else if (isCommand(tokens[i])){ //commands begin with letters
+				this.executeCommand(tokens[i]);
+			}  else { //print error otherwise 								
 				System.out.println("ERROR: invalid token");
 			}
 		}
@@ -90,13 +93,26 @@ public class FractionCalculator{
 	}
 
 	private boolean isFraction(String token) {
-		
+		String[] fractionComponents = token.split("/");
+		if (fractionComponents.length > 2) return false;
+		//check that the fraction components contain only digits, with the exception of the first character,
+		//which may be a negative sign
+		for (int i = 0; i < fractionComponents.length; i++){
+			if (fractionComponents[i].charAt(0) == '-') fractionComponents[i] = fractionComponents[i].substring(1);
+			for(int j = 0; j < fractionComponents[i].length(); j++){
+				if(!Character.isDigit(fractionComponents[i].charAt(j)))return false;
+			}
+		}
 		return true;
 	}
 	
 	private boolean isCommand(String token) {
-		
-		return true;
+		if (token.equals("a") || token.equals("abs") || token.equals("n") || token.equals("neg")
+			|| token.equals("c") || token.equals("clear") || token.equals("q") || token.equals("quit")){
+			return true;
+		} else {
+			return false;
+		}		
 	}
 	
 	private boolean isOperator(String token) {
