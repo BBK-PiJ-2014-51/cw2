@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class FractionCalculator{
 	private Fraction currentValue = new Fraction(0);
 	private String currentOperator = null;
@@ -6,23 +8,27 @@ public class FractionCalculator{
 		FractionCalculator calc = new FractionCalculator();
 		calc.printWelcomeMsg();
 		calc.loop();
-		calc.quit();
+		//calc.quit();
 	}
 	
 	public Fraction evaluate(Fraction fraction, String inputString) {
-		//if (!inputString.contains("\\s"));
 		inputString = inputString.toLowerCase();
 		String[] tokens = inputString.split("\\s");
 		this.currentValue = fraction;
 		for (int i = 0; i < tokens.length; i++){
-			if (isOperator(tokens[i])) { //at this point input should be an operator 
+			if (isOperator(tokens[i])) {
+				if (this.currentOperator != null){
+					System.out.println("ERROR: Operator already in memory!");
+				}
 				this.currentOperator = tokens[i];
 			}else if (isFraction(tokens[i])){ 
 				this.applyNextFraction(tokens[i]);
-			} else if (isCommand(tokens[i])){ //commands begin with letters
+			} else if (isCommand(tokens[i])){ 
 				this.executeCommand(tokens[i]);
-			}  else { //print error otherwise 								
-				System.out.println("ERROR: invalid token");
+			}  else {  								
+				if (!inputString.contains("q") && !inputString.contains("quit")) System.out.println("ERROR: invalid token");
+				this.reset();
+				break;
 			}
 		}
 		return this.currentValue;
@@ -31,9 +37,12 @@ public class FractionCalculator{
 	private void loop() {
 		boolean validInput = true;
 		while (validInput){
-			 String inputString = System.console().readLine();
+			Scanner scnr = new Scanner(System.in);
+			String inputString = scnr.nextLine();
+			//String inputString = System.console().readLine();
 			if (isValidInput(inputString)){
-				evaluate(this.currentValue, inputString); 
+				evaluate(this.currentValue, inputString);
+				System.out.println(currentValue.toString());
 			} else {
 				break;
 			}
@@ -46,7 +55,7 @@ public class FractionCalculator{
 	}
 	
 	private void quit() {
-		// TODO Implement	
+		System.out.println("Good bye!");
 	}
 	
 	/**
@@ -106,10 +115,6 @@ public class FractionCalculator{
 			this.currentValue = currentValue.negate();
 		} else if (token.equals("c") || token.equals("clear")){
 			this.reset();
-		} else if (token.equals("q") || token.equals("quit")){
-			this.quit(); //probably not what im going to do ultimately. 
-		} else {
-			
 		}
 	}
 	
@@ -158,9 +163,10 @@ public class FractionCalculator{
 	 */
 	private boolean isCommand(String token) {
 		if (token.equals("a") || token.equals("abs") || token.equals("n") || token.equals("neg")
-			|| token.equals("c") || token.equals("clear") || token.equals("q") || token.equals("quit")){
+			|| token.equals("c") || token.equals("clear")){
 			return true;
 		} else {
+			if (token.equals("q") || token.equals("quit")) this.quit();
 			return false;
 		}		
 	}
