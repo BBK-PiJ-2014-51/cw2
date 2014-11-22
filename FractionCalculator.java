@@ -35,16 +35,25 @@ public class FractionCalculator{
 	}
 	
 	private void loop() {
-		boolean validInput = true;
-		while (validInput){
+		while (true){
 			Scanner scnr = new Scanner(System.in);
-			String inputString = scnr.nextLine();
-			//String inputString = System.console().readLine();
-			if (isValidInput(inputString)){
+			String inputString = "";
+			if (!scnr.hasNextLine()) {
+				System.out.println("Good bye!");
+				this.reset();
+				break;
+			} else{
+				inputString = scnr.nextLine();
+			}
+			
+			if (userQuits(inputString)){
+				System.out.println("Quitting the program");
+			} else if (isValidInput(inputString)){
 				evaluate(this.currentValue, inputString);
 				System.out.println(currentValue.toString());
 			} else {
-				break;
+				System.out.println("Error invalid input");
+				this.reset();
 			}
 		}
 	}
@@ -132,6 +141,10 @@ public class FractionCalculator{
 			return new Fraction(Integer.parseInt(token));
 		}
 	}
+	
+	private boolean userQuits(String input){
+		return (input.contains("q") || input.contains("Q") || input.contains("quit"));
+	}
 
 	/**
 	 * Validates a fraction given as a string.
@@ -196,6 +209,7 @@ public class FractionCalculator{
 	 * @return boolean
 	 */
 	private boolean isValidInput(String inputString) {
+		if (inputString.isEmpty()) return false;
 		String[] tokens = inputString.split("\\s");	
 		for (int i = 0; i < tokens.length; i++){
 			if (!isValidToken(tokens[i])) return false;
