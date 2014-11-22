@@ -35,9 +35,10 @@ public class FractionCalculator{
 	}
 	
 	private void loop() {
+		Scanner scnr = new Scanner(System.in);
+		String inputString = "";
 		while (true){
-			Scanner scnr = new Scanner(System.in);
-			String inputString = "";
+			
 			if (!scnr.hasNextLine()) {
 				System.out.println("Good bye!");
 				this.reset();
@@ -48,11 +49,11 @@ public class FractionCalculator{
 			
 			if (userQuits(inputString)){
 				System.out.println("Quitting the program");
+				break;
 			} else if (isValidInput(inputString)){
 				evaluate(this.currentValue, inputString);
 				System.out.println(currentValue.toString());
 			} else {
-				System.out.println("Error invalid input");
 				this.reset();
 			}
 		}
@@ -212,7 +213,16 @@ public class FractionCalculator{
 		if (inputString.isEmpty()) return false;
 		String[] tokens = inputString.split("\\s");	
 		for (int i = 0; i < tokens.length; i++){
-			if (!isValidToken(tokens[i])) return false;
+			if (i < tokens.length - 2){
+				if (isOperator(tokens[i]) && isOperator(tokens[i+1])){
+					System.out.println("Error: You cannot use two operators consecutively!");
+					return false;
+				}
+			}
+			if (!isValidToken(tokens[i])){
+				System.out.println("Error: invalid token " + tokens[i]);
+				return false;
+			}
 		}
 		return true;
 	}
