@@ -6,9 +6,7 @@ public class FractionCalculator{
 	
 	public static void main(String[] args) {
 		FractionCalculator calc = new FractionCalculator();
-		calc.printWelcomeMsg();
 		calc.loop();
-		//calc.quit();
 	}
 	
 	public Fraction evaluate(Fraction fraction, String inputString) {
@@ -17,9 +15,6 @@ public class FractionCalculator{
 		this.currentValue = fraction;
 		for (int i = 0; i < tokens.length; i++){
 			if (isOperator(tokens[i])) {
-				if (this.currentOperator != null){
-					System.out.println("ERROR: Operator already in memory!");
-				}
 				this.currentOperator = tokens[i];
 			}else if (isFraction(tokens[i])){ 
 				this.applyNextFraction(tokens[i]);
@@ -37,14 +32,14 @@ public class FractionCalculator{
 	private void loop() {
 		Scanner scnr = new Scanner(System.in);
 		String inputString = "";
+		printWelcomeMsg();
 		while (true){
-			
 			if (!scnr.hasNextLine()) {
 				System.out.println("Good bye!");
 				this.reset();
 				break;
 			} else{
-				inputString = scnr.nextLine();
+				inputString = scnr.nextLine().toLowerCase();
 			}
 			
 			if (userQuits(inputString)){
@@ -53,25 +48,22 @@ public class FractionCalculator{
 			} else if (isValidInput(inputString)){
 				evaluate(this.currentValue, inputString);
 				System.out.println(currentValue.toString());
-			} else {
-				this.reset();
 			}
 		}
+		scnr.close();
 	}
 	
 	private void printWelcomeMsg() {
 		System.out.println("Welcome to my fraction calculator for PiJ coursework 2.");
 		System.out.println("By Caleb Clayton.");
 	}
-	
-	private void quit() {
-		System.out.println("Good bye!");
-	}
+
 	
 	/**
 	 * Resets the calculator to initial state.
 	 */
 	private void reset() {
+		System.out.println("Resetting calculator.");
 		this.currentValue = new Fraction(0);
 		this.currentOperator = null;
 	}
@@ -159,8 +151,7 @@ public class FractionCalculator{
 		if (token.length() == 0) return false;
 		String[] fractionComponents = token.split("/");
 		if (fractionComponents.length > 2) return false;
-		//check that the fraction components contain only digits, with the exception of the first character,
-		//which may be a negative sign
+		//check that the fraction components contain only digits, with the exception of the first character, which may be a negative sign
 		for (int i = 0; i < fractionComponents.length; i++){
 			if (fractionComponents[i].charAt(0) == '-') fractionComponents[i] = fractionComponents[i].substring(1);
 			for(int j = 0; j < fractionComponents[i].length(); j++){
@@ -180,7 +171,7 @@ public class FractionCalculator{
 			|| token.equals("c") || token.equals("clear")){
 			return true;
 		} else {
-			if (token.equals("q") || token.equals("quit")) this.quit();
+			//if (token.equals("q") || token.equals("quit")) this.quit();
 			return false;
 		}		
 	}
@@ -210,17 +201,23 @@ public class FractionCalculator{
 	 * @return boolean
 	 */
 	private boolean isValidInput(String inputString) {
-		if (inputString.isEmpty()) return false;
+		if (inputString.isEmpty()){
+			System.out.println("Error: empty line.");
+			this.reset();
+			return false;
+		}
 		String[] tokens = inputString.split("\\s");	
 		for (int i = 0; i < tokens.length; i++){
-			if (i < tokens.length - 2){
+			if (i < tokens.length - 1){	
 				if (isOperator(tokens[i]) && isOperator(tokens[i+1])){
-					System.out.println("Error: You cannot use two operators consecutively!");
+					System.out.println("Error: you cannot supply two operators consecutively.");
+					this.reset();
 					return false;
 				}
 			}
 			if (!isValidToken(tokens[i])){
 				System.out.println("Error: invalid token " + tokens[i]);
+				this.reset();
 				return false;
 			}
 		}
