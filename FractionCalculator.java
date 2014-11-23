@@ -34,10 +34,9 @@ public class FractionCalculator{
 		return this.currentValue;
 	}
 	
-	private String trimInputAfterQuit(String inputString) {
-		return inputString.substring(0, inputString.indexOf(" q") + 2);
-	}
-
+	/**
+	 * Main loop allowing user to perform multiple calculations
+	 */
 	private void loop() {
 		Scanner scnr = new Scanner(System.in);
 		String inputString = "";
@@ -66,6 +65,9 @@ public class FractionCalculator{
 		scnr.close();
 	}
 	
+	/**
+	 * Displays simply welcome message
+	 */
 	private void printWelcomeMsg() {
 		System.out.println("Welcome to my fraction calculator for PiJ coursework 2.");
 		System.out.println("By Caleb Clayton.");
@@ -148,6 +150,20 @@ public class FractionCalculator{
 		}
 	}
 	
+	/**
+	 * Removes input after user calls quit. allows string to pass validation so long as it is valid before quitting.
+	 * @param inputString
+	 * @return
+	 */
+	private String trimInputAfterQuit(String inputString) {
+		return inputString.substring(0, inputString.indexOf(" q") + 2);
+	}
+	
+	/**
+	 * returns true if user has input a quit command
+	 * @param input
+	 * @return
+	 */
 	private boolean userQuits(String input){
 		return (input.contains("q") || input.contains("Q") || input.contains("quit"));
 	}
