@@ -11,31 +11,41 @@ public class FractionCalculator{
 	
 	public Fraction evaluate(Fraction fraction, String inputString) {
 		inputString = inputString.toLowerCase();
+		if (userQuits(inputString)){
+			//remove potentially invalid input after user has requested exit
+			inputString = this.trimInputAfterQuit(inputString);
+		}
 		String[] tokens = inputString.split("\\s");
 		this.currentValue = fraction;
-		for (int i = 0; i < tokens.length; i++){
-			if (isOperator(tokens[i])) {
-				this.currentOperator = tokens[i];
-			}else if (isFraction(tokens[i])){ 
-				this.applyNextFraction(tokens[i]);
-			} else if (isCommand(tokens[i])){ 
-				this.executeCommand(tokens[i]);
-			}  else {  								
-				if (!inputString.contains("q") && !inputString.contains("quit")) System.out.println("ERROR: invalid token");
-				this.reset();
-				break;
+		if (isValidInput(inputString)){							
+			for (int i = 0; i < tokens.length; i++){
+				if (isOperator(tokens[i])) {
+					this.currentOperator = tokens[i];
+				}else if (isFraction(tokens[i])){ 
+					this.applyNextFraction(tokens[i]);
+				} else if (isCommand(tokens[i]) && !userQuits(tokens[i])){
+					this.executeCommand(tokens[i]);
+				} else if (userQuits(tokens[i])){
+					System.out.println("Quitting the program. Returning final result.");
+					break;
+				}
 			}
 		}
 		return this.currentValue;
 	}
 	
+	private String trimInputAfterQuit(String inputString) {
+		return inputString.substring(0, inputString.indexOf(" q") + 2);
+	}
+
 	private void loop() {
 		Scanner scnr = new Scanner(System.in);
 		String inputString = "";
 		printWelcomeMsg();
 		while (true){
+			// for an end of input exception just print the word "Goodbye" and exit the program
 			if (!scnr.hasNextLine()) {
-				System.out.println("Good bye!");
+				System.out.println("Goodbye");
 				this.reset();
 				break;
 			} else{
@@ -43,12 +53,15 @@ public class FractionCalculator{
 			}
 			
 			if (userQuits(inputString)){
-				System.out.println("Quitting the program");
-				break;
-			} else if (isValidInput(inputString)){
+				//remove potentially invalid input after user has requested exit
+				inputString = this.trimInputAfterQuit(inputString);
+			}
+			
+			if (isValidInput(inputString)){
 				evaluate(this.currentValue, inputString);
 				System.out.println(currentValue.toString());
 			}
+			if (userQuits(inputString)) break;
 		}
 		scnr.close();
 	}
@@ -168,10 +181,9 @@ public class FractionCalculator{
 	 */
 	private boolean isCommand(String token) {
 		if (token.equals("a") || token.equals("abs") || token.equals("n") || token.equals("neg")
-			|| token.equals("c") || token.equals("clear")){
+			|| token.equals("c") || token.equals("clear") || token.equals("q") || token.equals("quit")){
 			return true;
 		} else {
-			//if (token.equals("q") || token.equals("quit")) this.quit();
 			return false;
 		}		
 	}
