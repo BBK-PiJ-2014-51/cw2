@@ -10,7 +10,7 @@ public class FractionCalculator{
 	}
 	
 	public Fraction evaluate(Fraction fraction, String inputString) {
-		inputString = inputString.toLowerCase();
+		inputString = this.rewriteCommands(inputString);
 		if (userQuits(inputString)){
 			//remove potentially invalid input after user has requested exit
 			inputString = this.trimInputAfterQuit(inputString);
@@ -48,7 +48,7 @@ public class FractionCalculator{
 				this.reset();
 				break;
 			} else{
-				inputString = scnr.nextLine().toLowerCase();
+				inputString = this.rewriteCommands(scnr.nextLine());
 			}
 			
 			if (userQuits(inputString)){
@@ -126,11 +126,11 @@ public class FractionCalculator{
 	 * @param token
 	 */
 	private void executeCommand(String token) {
-		if (token.equals("a") || token.equals("abs")){
+		if (token.equals("a")){
 			this.currentValue = currentValue.absValue();
-		} else if (token.equals("n")  || token.equals("neg")){
+		} else if (token.equals("n")){
 			this.currentValue = currentValue.negate();
-		} else if (token.equals("c") || token.equals("clear")){
+		} else if (token.equals("c")){
 			this.reset();
 		}
 	}
@@ -159,13 +159,28 @@ public class FractionCalculator{
 		return inputString.substring(0, inputString.indexOf(" q") + 2);
 	}
 	
+	/*
+	 * Changes full word or uppercase commands to lower case single char equivalents
+	 */
+	private String rewriteCommands(String input){
+		if (input.contains("Q")) input = input.replace("Q", "q");
+		if (input.contains("quit"))input =  input.replace("quit", "q");
+		if (input.contains("A")) input = input.replace("A", "a");
+		if (input.contains("abs")) input = input.replace("abs", "a");
+		if (input.contains("N")) input = input.replace("N", "n");
+		if (input.contains("neg")) input = input.replace("neg", "n");
+		if (input.contains("C")) input = input.replace("C", "c");
+		if (input.contains("clear")) input = input.replace("clear", "c");
+		return input;
+	}
+	
 	/**
 	 * returns true if user has input a quit command
 	 * @param input
 	 * @return
 	 */
 	private boolean userQuits(String input){
-		return (input.contains("q") || input.contains("Q") || input.contains("quit"));
+		return (input.contains("q"));
 	}
 
 	/**
@@ -196,8 +211,7 @@ public class FractionCalculator{
 	 * @return
 	 */
 	private boolean isCommand(String token) {
-		if (token.equals("a") || token.equals("abs") || token.equals("n") || token.equals("neg")
-			|| token.equals("c") || token.equals("clear") || token.equals("q") || token.equals("quit")){
+		if (token.equals("a") || token.equals("n")	|| token.equals("c") || token.equals("q")){
 			return true;
 		} else {
 			return false;
