@@ -21,6 +21,7 @@ public class FractionCalculatorTest{
 		test.testExpressionString("1/4 + 3/4 q + 2 + 3", new Fraction(1), "Test 12: Quit with valid input supplied afterwards."); 
 		test.testExpressionString("1/4 + 3/4 q asfsd + +", new Fraction(1), "Test 13: Quit with invalid input supplied afterwards.");
 		test.testExpressionString("1/4 + 3/4 +d + +", new Fraction(0), "Test 14: More invalid input.");
+		test.testExpressionString("q", new Fraction(0), "Test 15: lone q.");
 	}
 	
 	/* tests expressions through a FractionCalculator's evaluate method */
